@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import {
   ArrowUpRight,
@@ -172,6 +172,7 @@ function App() {
   const [isDeletingRole, setIsDeletingRole] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const musicRef = useRef(null);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.25 });
   const parallax = useTransform(scrollYProgress, [0, 1], [0, -140]);
@@ -211,6 +212,25 @@ function App() {
     return () => clearTimeout(typingTimer);
   }, [isDeletingRole, roleIndex, typedRole]);
 
+  useEffect(() => {
+    const music = musicRef.current;
+
+    if (!music) {
+      return;
+    }
+
+    music.volume = 0.35;
+
+    if (musicOn) {
+      music.play().catch(() => {
+        setMusicOn(false);
+      });
+      return;
+    }
+
+    music.pause();
+  }, [musicOn]);
+
   const particles = useMemo(
     () =>
       Array.from({ length: 36 }, (_, index) => ({
@@ -225,6 +245,8 @@ function App() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-void text-slate-100">
+      <audio ref={musicRef} src="/Music/MONTAGEM%20PEGADORA.mp3" loop preload="auto" />
+
       <motion.div className="fixed left-0 right-0 top-0 z-50 h-1 origin-left bg-gradient-to-r from-arc via-ether to-fuchsia-400" style={{ scaleX: progress }} />
       <div className="pointer-events-none fixed inset-0 z-0">
         <motion.div
