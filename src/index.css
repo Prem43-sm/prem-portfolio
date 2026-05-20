@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #060813;
+}
+
+::selection {
+  background: rgba(87, 199, 255, 0.28);
+  color: white;
+}
+
+@layer components {
+  .primary-button {
+    @apply inline-flex items-center justify-center gap-2 rounded border border-arc/50 bg-arc/15 px-5 py-3 font-semibold text-white shadow-aura transition hover:-translate-y-0.5 hover:bg-arc/25;
+  }
+
+  .secondary-button {
+    @apply inline-flex items-center justify-center gap-2 rounded border border-white/15 bg-white/[0.04] px-5 py-3 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-ether/55 hover:bg-ether/15;
+  }
+
+  .icon-button {
+    @apply inline-flex h-11 min-w-11 items-center justify-center gap-1 rounded border border-white/10 bg-white/[0.04] px-3 text-slate-200 transition hover:border-arc/50 hover:bg-arc/10 hover:text-white;
+  }
+
+  .system-chip {
+    @apply inline-flex items-center gap-2 rounded border border-arc/30 bg-arc/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.16em] text-arc shadow-aura;
+  }
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(87, 199, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(87, 199, 255, 0.12) 1px, transparent 1px);
+  background-size: 58px 58px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 88%);
+}
+
+.bg-rain {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 34px,
+    rgba(87, 199, 255, 0.32) 35px,
+    transparent 36px
+  );
+}
+
+.typing-text::after {
+  content: "";
+  display: inline-block;
+  width: 0.6rem;
+  height: 1.3rem;
+  margin-left: 0.35rem;
+  vertical-align: -0.18rem;
+  background: #57c7ff;
+  animation: blink 0.8s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+  }
+}
