@@ -43,22 +43,22 @@ const typingRoles = [
   "Future AI Engineer",
   "Creative Programmer",
   "Smart Project Builder",
-  "Learning Never Stops 🚀"
+  "Learning Never Stops"
 ];
 
 const githubProfile = {
   name: "Prem Narayan Chandra",
   username: "Prem43-sm",
-  avatar: "/profile/github-avatar.png",
+  avatar: "https://avatars.githubusercontent.com/u/147651813?v=4",
   url: "https://github.com/Prem43-sm",
-  joined: "Oct 2023",
+  joined: "Oct 11, 2023",
   updated: "May 20, 2026",
-  bio: "Hi, I'm Prem, an MSc IT student passionate about software development, AI-based systems, and web technologies.",
+  bio: "MSc IT student focused on software development, AI-based systems, web technologies, and practical projects that turn learning into working tools.",
   stats: [
-    { label: "Repositorie", value: "7", icon: Github },
+    { label: "Repositories", value: "8", icon: Github },
     { label: "Followers", value: "1", icon: Users },
     { label: "Following", value: "1", icon: Users },
-    { label: "Total Stars", value: "7", icon: Star },
+    { label: "Total Stars", value: "8", icon: Star },
   ],
   links: [
     { label: "GitHub", icon: Github, href: "https://github.com/Prem43-sm" },
@@ -68,10 +68,12 @@ const githubProfile = {
 };
 
 const githubRepos = [
+  { name: "prem-portfolio", language: "JavaScript", stars: 1, updated: "May 21, 2026", href: "https://github.com/Prem43-sm/prem-portfolio" },
   { name: "LeafGuard", language: "Python", stars: 1, updated: "May 20, 2026", href: "https://github.com/Prem43-sm/LeafGuard" },
   { name: "2D_Sanke_game", language: "C++", stars: 1, updated: "May 20, 2026", href: "https://github.com/Prem43-sm/2D_Sanke_game" },
   { name: "Model_Train_for_Emotion_Detection", language: "Python", stars: 1, updated: "May 20, 2026", href: "https://github.com/Prem43-sm/Model_Train_for_Emotion_Detection" },
   { name: "DrishtiAI-0.1", language: "Python", stars: 1, updated: "May 20, 2026", href: "https://github.com/Prem43-sm/DrishtiAI-0.1" },
+  { name: "Chess-using-Pyside6", language: "Python", stars: 1, updated: "May 20, 2026", href: "https://github.com/Prem43-sm/Chess-using-Pyside6" },
 ];
 
 const skills = [
@@ -96,6 +98,16 @@ const timeline = [
 ];
 
 const projects = [
+  {
+    title: "Prem Portfolio",
+    logoText: "WEB",
+    description:
+      "Personal React portfolio with a Solo Leveling-inspired interface, animated sections, GitHub profile highlights, project cards, contact links, and a deployed Vercel demo.",
+    stack: ["React", "Vite", "Tailwind CSS", "Framer Motion"],
+    github: "https://github.com/Prem43-sm/prem-portfolio",
+    demo: "https://prem-portfolio-kohl.vercel.app",
+    type: "Web Portfolio",
+  },
   {
     title: "DrishtiAI 0.1",
     image: "/projects/drishtiai-logo.png",
