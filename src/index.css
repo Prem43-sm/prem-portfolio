@@ -65,9 +65,89 @@ body {
   animation: blink 0.8s steps(2, start) infinite;
 }
 
+.system-title {
+  letter-spacing: 0;
+  text-shadow:
+    0 0 14px rgba(87, 199, 255, 0.72),
+    0 0 38px rgba(156, 107, 255, 0.34);
+  animation: hologram-flicker 5.5s ease-in-out infinite;
+}
+
+.system-scanline {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.system-scanline::before {
+  content: "";
+  position: absolute;
+  left: -15%;
+  right: -15%;
+  top: -24%;
+  height: 34%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(87, 199, 255, 0.08),
+    rgba(87, 199, 255, 0.2),
+    transparent
+  );
+  filter: blur(0.5px);
+  animation: terminal-scan 4.8s linear infinite;
+}
+
+.system-scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0 8px,
+    rgba(87, 199, 255, 0.045) 9px,
+    transparent 10px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
 @keyframes blink {
   50% {
     opacity: 0;
+  }
+}
+
+@keyframes terminal-scan {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(420%);
+  }
+}
+
+@keyframes hologram-flicker {
+  0%,
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+
+  31% {
+    opacity: 0.88;
+    filter: brightness(1.2);
+  }
+
+  32%,
+  34% {
+    opacity: 1;
+  }
+
+  66% {
+    opacity: 0.92;
+    filter: brightness(1.08);
   }
 }
 

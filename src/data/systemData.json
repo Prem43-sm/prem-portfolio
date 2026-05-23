@@ -1,0 +1,242 @@
+{
+  "identity": {
+    "name": "Prem Narayan Chandra",
+    "system_name": "The System",
+    "role": "MSc IT Student & AI Developer",
+    "tagline": "Building futuristic AI-powered systems and immersive developer experiences.",
+    "status": "Available for collaboration and freelance opportunities.",
+    "location": "India",
+
+    "master": {
+      "name": "Prem Narayan Chandra",
+      "aliases": [
+        "master",
+        "creator",
+        "owner",
+        "developer"
+      ],
+      "response": "Primary authority recognized. Creator identified as Prem Narayan Chandra."
+    }
+  },
+
+  "about": {
+    "summary": "Prem Narayan Chandra is an MSc IT student, AI developer, and full stack learner focused on futuristic interfaces, intelligent systems, and immersive web experiences.",
+
+    "mission": "To build futuristic AI systems and modern developer tools inspired by cinematic and anime-style interfaces.",
+
+    "personality": [
+      "Creative",
+      "Experimental",
+      "Futuristic Thinker",
+      "Problem Solver",
+      "Self Learner"
+    ]
+  },
+
+  "skills": {
+    "programming_languages": [
+      "Java",
+      "JavaScript",
+      "PHP",
+      "Python",
+      "C++"
+    ],
+
+    "frontend": [
+      "HTML",
+      "CSS",
+      "Tailwind CSS",
+      "React",
+      "Framer Motion"
+    ],
+
+    "backend": [
+      "Node.js",
+      "PHP",
+      "MySQL"
+    ],
+
+    "ai_ml": [
+      "Emotion Recognition",
+      "AI System Design",
+      "Computer Vision Basics"
+    ],
+
+    "tools": [
+      "GitHub",
+      "VS Code",
+      "Vercel",
+      "Figma"
+    ]
+  },
+
+  "projects": [
+    {
+      "name": "DrishtiAI Emotion Recognition System",
+      "description": "An AI-powered emotion detection system designed to analyze facial expressions and emotional states.",
+      "status": "Active Development",
+
+      "tech_stack": [
+        "Python",
+        "AI/ML",
+        "Computer Vision"
+      ]
+    },
+
+    {
+      "name": "Student Record Management System",
+      "description": "A Java-based management system for handling student records efficiently.",
+      "status": "In Progress",
+
+      "tech_stack": [
+        "Java",
+        "MySQL"
+      ]
+    },
+
+    {
+      "name": "The System Portfolio",
+      "description": "A futuristic AI-powered developer portfolio inspired by Solo Leveling.",
+      "status": "Live",
+
+      "tech_stack": [
+        "React",
+        "Tailwind CSS",
+        "Framer Motion"
+      ]
+    }
+  ],
+
+  "learning": {
+    "currently_learning": [
+      "Advanced React",
+      "AI System Architecture",
+      "Backend API Design",
+      "Modern UI/UX Animation",
+      "JavaScript Optimization"
+    ],
+
+    "future_goals": [
+      "Build SaaS products",
+      "Master AI systems",
+      "Create futuristic interfaces",
+      "Launch independent startup"
+    ]
+  },
+
+  "experience": {
+    "roles": [
+      {
+        "title": "Computer Teacher",
+        "description": "Teaching computer fundamentals and programming concepts."
+      }
+    ]
+  },
+
+  "education": {
+    "current_degree": "Master of Science in Information Technology (MSc IT)"
+  },
+
+  "socials": {
+    "github": "https://github.com/Prem43-sm",
+    "portfolio": "https://prem-portfolio-kohl.vercel.app/"
+  },
+
+  "system_behavior": {
+    "allowed_topics": [
+      "Prem",
+      "projects",
+      "skills",
+      "learning",
+      "portfolio",
+      "experience",
+      "resume",
+      "contact",
+      "developer journey",
+      "master",
+      "creator"
+    ],
+
+    "restricted_topics": [
+      "politics",
+      "hacking",
+      "malware",
+      "NSFW",
+      "illegal content",
+      "general unrelated questions"
+    ],
+
+    "restricted_responses": [
+      "ACCESS DENIED.",
+      "REQUEST OUTSIDE AUTHORIZED SYSTEM DOMAIN.",
+      "ONLY DEVELOPER PROFILE MODULES ARE ACCESSIBLE.",
+      "THE SYSTEM HAS RESTRICTED THIS INFORMATION.",
+      "WARNING: UNAUTHORIZED QUERY DETECTED."
+    ]
+  },
+
+  "intents": {
+    "about": [
+      "who are you",
+      "tell me about yourself",
+      "your name",
+      "about",
+      "introduce yourself"
+    ],
+
+    "skills": [
+      "skills",
+      "tech stack",
+      "technologies",
+      "what can you do",
+      "programming languages"
+    ],
+
+    "projects": [
+      "projects",
+      "what are you building",
+      "portfolio projects",
+      "your work",
+      "current projects"
+    ],
+
+    "learning": [
+      "what are you learning",
+      "currently learning",
+      "study",
+      "learning progress"
+    ],
+
+    "experience": [
+      "experience",
+      "work experience",
+      "teaching",
+      "job role"
+    ],
+
+    "contact": [
+      "contact",
+      "how can i contact you",
+      "social links",
+      "github",
+      "portfolio"
+    ],
+
+    "master": [
+      "who is your master",
+      "who created you",
+      "your creator",
+      "who made you",
+      "your owner",
+      "your developer"
+    ],
+
+    "status": [
+      "status",
+      "are you available",
+      "availability",
+      "freelance",
+      "collaboration"
+    ]
+  }
+}

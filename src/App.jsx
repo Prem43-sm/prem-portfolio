@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import {
+  Activity,
   ArrowUpRight,
   BadgeCheck,
   BookOpen,
@@ -8,7 +9,9 @@ import {
   Braces,
   CalendarDays,
   Code2,
+  Cpu,
   Database,
+  FileText,
   Github,
   Instagram,
   Linkedin,
@@ -16,11 +19,14 @@ import {
   Music,
   Pause,
   Play,
+  Radio,
   Shield,
   Sparkles,
   Star,
   Terminal,
   Users,
+  Volume2,
+  VolumeX,
   Zap,
 } from "lucide-react";
 import { ANIME_IMAGE_PATHS } from "./config/animeImages";
@@ -173,6 +179,10 @@ const projects = [
   },
 ];
 
+const systemCommands = ["help", "about", "skills", "projects", "learning", "status", "resume", "github", "contact", "clear"];
+const exactSystemCommands = new Set(systemCommands);
+const resumeRequestUrl = "mailto:pc495688@gmail.com?subject=Resume%20Request%20-%20Prem%20Narayan%20Chandra";
+
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0 },
@@ -290,7 +300,7 @@ function App() {
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <a href="#hero" className="font-mono text-sm uppercase tracking-[0.32em] text-arc">Premnarayan</a>
           <div className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
-            {["About", "GitHub", "Skills", "Progress", "Projects", "Journey", "Contact"].map((item) => (
+            {["System", "About", "GitHub", "Skills", "Progress", "Projects", "Journey", "Contact"].map((item) => (
               <a key={item} href={`#${item.toLowerCase()}`} className="transition hover:text-arc">
                 {item}
               </a>
@@ -356,6 +366,8 @@ function App() {
           </motion.div>
         </div>
       </section>
+
+      <SystemInterface />
 
       <Section id="about" eyebrow="Profile" title="About Me">
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
@@ -542,6 +554,449 @@ function App() {
       </Section>
     </main>
   );
+}
+
+function SystemInterface() {
+  const [terminalLines, setTerminalLines] = useState([]);
+  const [input, setInput] = useState("");
+  const [isBooting, setIsBooting] = useState(true);
+  const [isThinking, setIsThinking] = useState(false);
+  const [isAutoTyping, setIsAutoTyping] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [clock, setClock] = useState(() => new Date());
+  const terminalRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => setClock(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timers = [];
+    const bootLines = [
+      "> Initializing The System...",
+      "> Loading neural interface...",
+      "> Syncing developer profile...",
+      "> Calibrating hunter signature...",
+      "> Access Granted.",
+    ];
+
+    bootLines.forEach((line, index) => {
+      const bootTimer = setTimeout(() => {
+        setTerminalLines((current) => [...current, { type: "boot", content: line }]);
+        if (index === bootLines.length - 1) {
+          const accessTimer = setTimeout(() => {
+            setTerminalLines((current) => [
+              ...current,
+              { type: "system", content: "Welcome, Hunter.\nYou have accessed The System." },
+            ]);
+            setIsBooting(false);
+          }, 550);
+          timers.push(accessTimer);
+        }
+      }, index * 520);
+      timers.push(bootTimer);
+    });
+
+    return () => {
+      timers.forEach((timer) => clearTimeout(timer));
+    };
+  }, []);
+
+  useEffect(() => {
+    terminalRef.current?.scrollTo({ top: terminalRef.current.scrollHeight, behavior: "smooth" });
+  }, [terminalLines, isThinking]);
+
+  const executeCommand = async (rawCommand) => {
+    const command = rawCommand.trim().toLowerCase();
+
+    if (!command || isBooting || isThinking) {
+      return;
+    }
+
+    if (command === "clear") {
+      setTerminalLines([{ type: "system", content: "Terminal memory cleared. Developer interface remains online." }]);
+      setInput("");
+      return;
+    }
+
+    setTerminalLines((current) => [...current, { type: "command", content: `> ${command}` }]);
+    setInput("");
+    setIsThinking(true);
+
+    if (exactSystemCommands.has(command)) {
+      setTimeout(() => {
+        setTerminalLines((current) => [...current, { type: "response", command, content: getSystemResponse(command) }]);
+        setIsThinking(false);
+      }, 520);
+      return;
+    }
+
+    try {
+      const response = await requestSystemIntelligence(command);
+      setTerminalLines((current) => [...current, { type: response.type || "response", command, content: response.message }]);
+    } catch {
+      setTerminalLines((current) => [
+        ...current,
+        {
+          type: "restricted",
+          command,
+          content: "SYSTEM LINK INTERRUPTED.\nBACKEND INTELLIGENCE MODULE IS NOT RESPONDING.",
+        },
+      ]);
+    } finally {
+      setIsThinking(false);
+    }
+  };
+
+  const autoTypeCommand = (command) => {
+    if (isBooting || isThinking || isAutoTyping) {
+      return;
+    }
+
+    setInput("");
+    setIsAutoTyping(true);
+    let index = 0;
+    const typeTimer = setInterval(() => {
+      index += 1;
+      setInput(command.slice(0, index));
+
+      if (index >= command.length) {
+        clearInterval(typeTimer);
+        setTimeout(() => {
+          setIsAutoTyping(false);
+          executeCommand(command);
+        }, 220);
+      }
+    }, 54);
+  };
+
+  const formattedTime = clock.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
+  return (
+    <section id="system" className="relative z-10 overflow-hidden px-5 py-20">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(87,199,255,0.18),transparent_28%),linear-gradient(180deg,transparent,rgba(6,8,19,0.86))]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-arc/70 to-transparent" />
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.24 }}
+          transition={{ duration: 0.65 }}
+          className="relative"
+        >
+          <div className="mb-8 text-center">
+            <div className="mx-auto mb-4 flex max-w-xl items-center justify-center gap-4 text-arc/80">
+              <span className="h-px flex-1 bg-gradient-to-r from-transparent to-arc/70" />
+              <Activity size={19} className="animate-pulse" />
+              <span className="h-px flex-1 bg-gradient-to-l from-transparent to-arc/70" />
+            </div>
+            <h2 className="system-title text-4xl font-black uppercase text-white sm:text-6xl">The System</h2>
+            <div className="mt-4 flex items-center justify-center gap-3 font-mono text-xs uppercase tracking-[0.24em] text-slate-400">
+              <span className="relative flex h-3 w-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-arc opacity-70" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-arc shadow-[0_0_18px_rgba(87,199,255,1)]" />
+              </span>
+              Initializing Developer Interface...
+            </div>
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+            <div className="space-y-5">
+              <GlassCard className="relative overflow-hidden p-5">
+                <div className="system-scanline" />
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <div>
+                    <div className="font-mono text-xs uppercase tracking-[0.24em] text-arc">System Status</div>
+                    <h3 className="mt-2 text-2xl font-black text-white">Hunter Profile HUD</h3>
+                  </div>
+                  <div className="rounded border border-arc/40 bg-arc/10 px-3 py-2 font-mono text-xs uppercase text-arc shadow-aura">Online</div>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {[
+                    ["SYSTEM STATUS", "ONLINE"],
+                    ["CURRENT MODE", "BUILDING"],
+                    ["ACTIVE PROJECT", "DRISHTI_AI"],
+                    ["CURRENT LEARNING", "React + AI Systems"],
+                    ["POWER LEVEL", "Increasing"],
+                    ["LAST UPDATE", "Today"],
+                  ].map(([label, value], index) => (
+                    <motion.div
+                      key={label}
+                      initial={{ opacity: 0, x: -14 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.06 }}
+                      className="relative overflow-hidden rounded border border-white/10 bg-black/25 p-4"
+                    >
+                      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-arc/65 to-transparent" />
+                      <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">{label}</div>
+                      <div className="mt-2 break-words font-mono text-sm font-bold text-white">{value}</div>
+                    </motion.div>
+                  ))}
+                </div>
+              </GlassCard>
+
+              <GlassCard className="relative overflow-hidden p-6">
+                <div className="system-scanline" />
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <div className="font-mono text-xs uppercase tracking-[0.24em] text-arc">AI Core</div>
+                    <h3 className="mt-2 text-2xl font-black text-white">Neural Orb</h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSoundEnabled((value) => !value)}
+                    className="icon-button"
+                    aria-label="Toggle system sound"
+                    title="Toggle system sound"
+                  >
+                    {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                  </button>
+                </div>
+                <div className="relative mx-auto mt-8 flex aspect-square max-w-[20rem] items-center justify-center">
+                  <motion.div className="absolute inset-8 rounded-full border border-arc/25" animate={{ rotate: 360 }} transition={{ duration: 12, repeat: Infinity, ease: "linear" }} />
+                  <motion.div className="absolute inset-14 rounded-full border border-dashed border-ether/45" animate={{ rotate: -360 }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }} />
+                  <motion.div
+                    className="absolute inset-20 rounded-full bg-[radial-gradient(circle,#eafaff_0%,#57c7ff_28%,rgba(156,107,255,0.24)_55%,transparent_72%)] shadow-[0_0_70px_rgba(87,199,255,0.55)]"
+                    animate={{ scale: [1, 1.08, 1], opacity: [0.78, 1, 0.78] }}
+                    transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <Cpu className="relative z-10 text-white drop-shadow-[0_0_18px_rgba(87,199,255,0.9)]" size={42} />
+                  <div className="absolute bottom-3 left-1/2 w-44 -translate-x-1/2 rounded border border-white/10 bg-black/35 px-3 py-2 text-center font-mono text-xs text-slate-300 backdrop-blur">
+                    CORE_SYNC {formattedTime}
+                  </div>
+                </div>
+              </GlassCard>
+            </div>
+
+            <GlassCard className="relative overflow-hidden">
+              <div className="system-scanline" />
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 bg-black/35 px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1.5">
+                    <span className="h-3 w-3 rounded-full bg-red-400/80" />
+                    <span className="h-3 w-3 rounded-full bg-yellow-300/80" />
+                    <span className="h-3 w-3 rounded-full bg-arc/90" />
+                  </div>
+                  <div className="font-mono text-xs uppercase tracking-[0.18em] text-slate-400">THE_SYSTEM.EXE</div>
+                </div>
+                <div className="flex items-center gap-2 font-mono text-xs text-arc">
+                  <Radio size={15} className="animate-pulse" />
+                  LIVE INTERFACE
+                </div>
+              </div>
+
+              <div ref={terminalRef} className="h-[31rem] overflow-y-auto bg-black/35 p-4 font-mono text-sm leading-7 text-slate-200 sm:p-6">
+                <AnimatePresence initial={false}>
+                  {terminalLines.map((line, index) => (
+                    <motion.div
+                      key={`${line.type}-${index}`}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.22 }}
+                      className={line.type === "command" ? "text-arc" : line.type === "boot" ? "text-slate-400" : "mb-3 text-slate-200"}
+                    >
+                      {typeof line.content === "string" ? <TerminalText text={line.content} /> : line.content}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+                {isThinking ? (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-2 flex items-center gap-2 text-arc">
+                    <span className="h-2 w-2 animate-ping rounded-full bg-arc" />
+                    AI core thinking...
+                  </motion.div>
+                ) : null}
+              </div>
+
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  executeCommand(input);
+                }}
+                className="flex items-center gap-3 border-t border-white/10 bg-black/45 p-4"
+              >
+                <span className="font-mono text-arc">&gt;</span>
+                <input
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
+                  disabled={isBooting || isThinking || isAutoTyping}
+                  className="min-w-0 flex-1 bg-transparent font-mono text-sm text-white outline-none placeholder:text-slate-600 disabled:cursor-wait"
+                  placeholder={isBooting ? "Boot sequence running..." : "Enter command: help"}
+                />
+                <button type="submit" className="icon-button" aria-label="Run command" title="Run command">
+                  <Terminal size={18} />
+                </button>
+              </form>
+
+              <div className="grid gap-2 border-t border-white/10 bg-black/25 p-4 sm:grid-cols-2 lg:grid-cols-4">
+                {["about", "skills", "projects", "learning", "resume", "github", "contact"].map((command) => (
+                  <motion.button
+                    key={command}
+                    type="button"
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => autoTypeCommand(command)}
+                    className="rounded border border-arc/20 bg-arc/10 px-4 py-3 font-mono text-xs uppercase tracking-[0.16em] text-slate-100 transition hover:border-arc/60 hover:bg-arc/20 hover:text-white hover:shadow-aura disabled:cursor-wait disabled:opacity-50"
+                    disabled={isBooting || isThinking || isAutoTyping}
+                  >
+                    {command}
+                  </motion.button>
+                ))}
+              </div>
+            </GlassCard>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+async function requestSystemIntelligence(message) {
+  const response = await fetch("/api/system-ai", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message }),
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    if (data?.message) {
+      return {
+        type: data.type || "restricted",
+        message: data.message,
+      };
+    }
+
+    throw new Error(data?.error || "SYSTEM_API_ERROR");
+  }
+
+  return {
+    type: data.type || "response",
+    message: data.message || "SYSTEM RESPONSE EMPTY.\nAUTHORIZED DATA STREAM COULD NOT BE RENDERED.",
+  };
+}
+
+function TerminalText({ text }) {
+  const lines = text.split("\n");
+
+  return (
+    <>
+      {lines.map((line, index) => (
+        <span key={`${line}-${index}`}>
+          {line}
+          {index < lines.length - 1 ? <br /> : null}
+        </span>
+      ))}
+    </>
+  );
+}
+
+function getSystemResponse(command) {
+  switch (command) {
+    case "help":
+      return (
+        <div>
+          <div className="mb-2 text-white">Available system commands:</div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {systemCommands.map((item) => (
+              <span key={item} className="rounded border border-white/10 bg-white/[0.035] px-3 py-2 text-arc">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    case "about":
+      return "Prem Narayan Chandra\nMSc IT Student\nAI Developer\nFull Stack Learner\nBuilding futuristic systems.";
+    case "skills":
+      return (
+        <div className="grid gap-2 sm:grid-cols-2">
+          {["Java", "PHP", "MySQL", "React", "AI/ML", "JavaScript", "Tailwind"].map((skill, index) => (
+            <motion.div
+              key={skill}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.04 }}
+              className="rounded border border-arc/20 bg-arc/10 px-3 py-2 text-white"
+            >
+              <span className="text-arc">+</span> {skill}
+            </motion.div>
+          ))}
+        </div>
+      );
+    case "projects":
+      return "Quest Archive:\n- DrishtiAI Emotion Recognition\n- Student Record Management System\n- AI Portfolio Website";
+    case "learning":
+      return (
+        <div className="space-y-3">
+          {[
+            ["React.js", 82],
+            ["AI Optimization", 68],
+            ["Backend Systems", 74],
+            ["Advanced JavaScript", 78],
+          ].map(([label, value]) => (
+            <div key={label}>
+              <div className="mb-1 flex justify-between gap-3 text-xs text-slate-300">
+                <span>{label}</span>
+                <span>{value}%</span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <motion.div
+                  className="h-full rounded-full bg-gradient-to-r from-arc to-ether"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${value}%` }}
+                  transition={{ duration: 0.8 }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    case "status":
+      return "Currently available for collaboration and freelance opportunities.";
+    case "resume":
+      return (
+        <div>
+          <div className="mb-3">Resume channel prepared. Request the latest PDF directly from Prem.</div>
+          <a href={resumeRequestUrl} className="primary-button text-sm">
+            <FileText size={17} /> Open Resume Request
+          </a>
+        </div>
+      );
+    case "github":
+      return (
+        <div>
+          <div className="mb-3">GitHub profile detected: Prem43-sm</div>
+          <a href="https://github.com/Prem43-sm" target="_blank" rel="noreferrer" className="primary-button text-sm">
+            <Github size={17} /> Open GitHub
+          </a>
+        </div>
+      );
+    case "contact":
+      return (
+        <div className="flex flex-wrap gap-2">
+          {[
+            ["Email", Mail, "mailto:pc495688@gmail.com"],
+            ["GitHub", Github, "https://github.com/Prem43-sm"],
+            ["LinkedIn", Linkedin, "https://www.linkedin.com/in/prem-narayan-chandra-3019a622b"],
+            ["Instagram", Instagram, "https://www.instagram.com/_devil_x_prem_?igsh=NTc4MTIwNjQ2YQ=="],
+          ].map(([label, Icon, href]) => (
+            <a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined} className="secondary-button text-sm">
+              <Icon size={16} /> {label}
+            </a>
+          ))}
+        </div>
+      );
+    default:
+      return `Unknown command: ${command}. Type "help" to reveal available system commands.`;
+  }
 }
 
 function Section({ id, eyebrow, title, children }) {
