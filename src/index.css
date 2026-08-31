@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -11,45 +11,47 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: #060813;
+  background: #101417;
+  color: #eff3ef;
+  font-feature-settings: "ss01" 1, "ss02" 1;
 }
 
 ::selection {
-  background: rgba(87, 199, 255, 0.28);
-  color: white;
+  background: #8ed0e5;
+  color: #101417;
 }
 
 @layer components {
   .primary-button {
-    @apply inline-flex items-center justify-center gap-2 rounded border border-arc/50 bg-arc/15 px-5 py-3 font-semibold text-white shadow-aura transition hover:-translate-y-0.5 hover:bg-arc/25;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-arc bg-arc px-5 py-3 font-semibold text-slate-950 transition duration-200 hover:-translate-y-0.5 hover:bg-[#b1e1ee] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc;
   }
 
   .secondary-button {
-    @apply inline-flex items-center justify-center gap-2 rounded border border-white/15 bg-white/[0.04] px-5 py-3 font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-ether/55 hover:bg-ether/15;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-white/20 bg-white/[0.03] px-5 py-3 font-semibold text-slate-100 transition duration-200 hover:-translate-y-0.5 hover:border-arc/70 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc;
   }
 
   .icon-button {
-    @apply inline-flex h-11 min-w-11 items-center justify-center gap-1 rounded border border-white/10 bg-white/[0.04] px-3 text-slate-200 transition hover:border-arc/50 hover:bg-arc/10 hover:text-white;
+    @apply inline-flex h-10 min-w-10 items-center justify-center gap-1 rounded-sm border border-white/15 bg-white/[0.03] px-3 text-slate-200 transition duration-200 hover:border-arc/60 hover:bg-white/[0.08] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-arc;
   }
 
   .system-chip {
-    @apply inline-flex items-center gap-2 rounded border border-arc/30 bg-arc/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.16em] text-arc shadow-aura;
+    @apply inline-flex items-center gap-2 rounded-sm border border-arc/40 bg-arc/10 px-3 py-2 font-mono text-xs uppercase tracking-[0.13em] text-arc;
   }
 }
 
 .bg-grid {
   background-image:
-    linear-gradient(rgba(87, 199, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(87, 199, 255, 0.12) 1px, transparent 1px);
-  background-size: 58px 58px;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 88%);
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent 70%);
 }
 
 .bg-rain {
   background-image: repeating-linear-gradient(
     90deg,
     transparent 0 34px,
-    rgba(87, 199, 255, 0.32) 35px,
+    rgba(142, 208, 229, 0.12) 35px,
     transparent 36px
   );
 }
@@ -67,10 +69,8 @@ body {
 
 .system-title {
   letter-spacing: 0;
-  text-shadow:
-    0 0 14px rgba(87, 199, 255, 0.72),
-    0 0 38px rgba(156, 107, 255, 0.34);
-  animation: hologram-flicker 5.5s ease-in-out infinite;
+  text-shadow: none;
+  animation: none;
 }
 
 .system-scanline {
@@ -87,29 +87,11 @@ body {
   right: -15%;
   top: -24%;
   height: 34%;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgba(87, 199, 255, 0.08),
-    rgba(87, 199, 255, 0.2),
-    transparent
-  );
-  filter: blur(0.5px);
-  animation: terminal-scan 4.8s linear infinite;
+  display: none;
 }
 
 .system-scanline::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent 0 8px,
-    rgba(87, 199, 255, 0.045) 9px,
-    transparent 10px
-  );
-  mix-blend-mode: screen;
-  opacity: 0.8;
+  display: none;
 }
 
 @keyframes blink {
@@ -156,4 +138,8 @@ body {
   .secondary-button {
     width: 100%;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
